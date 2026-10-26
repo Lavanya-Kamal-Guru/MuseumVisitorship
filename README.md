@@ -111,7 +111,7 @@ An overview with interactive filters.
 
 - Compares three museums side by side on one chart.
 
-![Compare](docs/screenshots/compare.png)
+![Compare](docs/screenshots/Compare.png)
 
 ### 4.5 UX notes
 
