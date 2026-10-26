@@ -207,25 +207,24 @@ Notes
 
 ## 7. Data Synchronisation
 
-**Approach:** data is pulled from data.gov.sg and **stored in the application's own database**. The screens read from this local copy rather than calling the API on each request.
+Approach: data is pulled from data.gov.sg and stored in the application's own database. The screens read from this local copy rather than calling the API on each request.
+Sync schedule
+Trigger	Detail
+Automatic	A timer runs `SyncAll` daily at 12:00 am (`[timezone]`), so the data is refreshed every day without any user action
+Manual	A user can start a sync on demand from `[screen / button]` (`[role required]`). The button is disabled and shows a progress indicator while the sync runs, and the last sync time is shown afterwards
+Both triggers call the same `SyncAll` action, so they behave identically. `[If a sync is already running, a second one is skipped or queued: describe your rule.]`
+Flow
+`SyncAll` is triggered either by the daily timer at 12:00 am (`[timezone]`) or by a manual sync started by a user (`[screen / button where it lives]`).
+`FetchVisitorship` calls the API (with pagination if the dataset requires it). `[Describe how MuseumURL is used here.]`
+`MapToEntities` converts raw records into museums and visitorship rows, and validates them.
+`UpsertMuseums` and `UpsertVisitorship` write the data. The sync is idempotent, so running it twice creates no duplicates.
+`LastSynced` (Museum) and `LastSyncedOn` (Visitorship) are stamped on every row processed, and the outcome is logged (`[Service Center log / extended log]`).
+Data quality rules
+Case	Handling
+Non-numeric or empty visitor count (e.g. `na`)	`[skipped / set to 0]` and logged
+Duplicate record	Updated in place
+API failure	Error is logged, existing data is left untouched and `LastSynced` is not updated
 
-**Flow**
-
-1. A **timer** (`[schedule]`) or the manual action triggers `SyncAll`.
-2. `FetchVisitorship` calls the API (with pagination if the dataset requires it).
-3. `MapToEntities` converts raw records into museums and visitorship rows, and validates them.
-4. `UpsertMuseums` and `UpsertVisitorship` write the data. The sync is **idempotent**, so running it twice creates no duplicates.
-5. The outcome is recorded in `SyncLog`.
-
-**Data quality rules**
-
-| Case | Handling |
-|---|---|
-| Non-numeric or empty visitor count (e.g. `na`) | `[skipped / set to 0]` and counted in the log |
-| Duplicate record | Updated in place |
-| API failure | Sync is marked failed, error is logged, existing data is left untouched |
-
----
 
 ## 8. Design Decisions and Trade-offs
 
