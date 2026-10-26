@@ -239,17 +239,20 @@ Both triggers call the same `SyncAll` action, so they behave identically. `[If a
 
 **Security and robustness**
 
-- `[Role-based access for any admin or sync screens]`
-- `[API timeouts and retry behaviour]`
-- `[Input validation on filters]`
-
+- `[Role-based access for sync screens]`
 ---
 
 ## 9. Infrastructure as Code (AWS)
 
 The IaC lives in `infrastructure/` and is written in **Terraform** `[version]`.
 
-> **Scope note:** `[State your assumption. For example: "This provisions the AWS infrastructure for a self-managed OutSystems 11 environment. OutSystems Developer Cloud is operated by OutSystems on AWS, so the resources below apply to the self-managed model."]`
+> **Scope note:** This Terraform code provisions the AWS infrastructure for a
+> self-managed OutSystems 11 environment: network, front-end servers behind a
+> load balancer, the platform database, storage, secrets and monitoring. The
+> application itself is built and deployed through OutSystems tooling, not
+> Terraform. The code has been validated and planned (`terraform validate`,
+> `terraform plan`) but `[has / has not]` been applied, to avoid cost. Sizing
+> values are `[illustrative / based on ...]` and would be tuned for real load.
 
 ### 9.1 What it provisions
 
@@ -310,7 +313,7 @@ terraform plan -var-file=environments/dev.tfvars
 
 | Layer | Tool | What is covered |
 |---|---|---|
-| Application logic | OutSystems **BDD Framework** `[or the approach used]` | Mapping, upsert, idempotency, error handling, aggregation |
+| Application logic | OutSystems URL provided | Mapping, upsert, idempotency, error handling, aggregation |
 | Infrastructure | `terraform fmt`, `terraform validate`, `tflint`, `checkov` `[and Terratest if used]` | Syntax, lint, security misconfiguration |
 | Pipeline | GitHub Actions | Runs the IaC checks on every push |
 
@@ -323,24 +326,20 @@ The live API call is deliberately **not** unit-tested. Tests feed canned sample 
 
 ### 10.3 Scenarios
 
-| # | Scenario | Given | When | Then |
-|---|---|---|---|---|
-| 1 | Mapping | Raw records with museum, period and visitors | `MapToEntities` runs | Fields are mapped with correct types |
-| 2 | Bad values | A record with `na` or empty visitors | `MapToEntities` runs | Row is handled per the rule and no exception is raised |
-| 3 | Idempotent sync | Data already synced once | The same data is synced again | Row counts are unchanged |
-| 4 | Update | An existing row with a different count | Sync runs | The count is updated, not duplicated |
-| 5 | API failure | The fetch step fails | `SyncAll` runs | Status is failed, error is logged, existing data is intact |
-| 6 | Aggregation | Known test rows | The total action runs | The total equals the hand-calculated sum |
-| 7 | `[Filter by year range]` | `[...]` | `[...]` | `[...]` |
-| 8 | `[Compare three museums]` | `[...]` | `[...]` | `[...]` |
+
+|# | Feature | Scenario | Given | When| Then |
+|---|---|---|---|---|---|
+|1|	Museum export	| Exporting museums returns an Excel file| Museums exist in the system| The museums export runs | An Excel file is returned|
+|2|	Visitorship records|	A saved record can be read back|	A new record for year 2026 with 360000 visitors| The record is saved | It can be read back, and year and visitorship matchy|
+|3|	Visitorship totals|	The total equals the sum of the records	|Visitorship records exist|	Totals are calculated |	The total equals the sum of all records|
+
 
 ### 10.4 Running the tests
 
 **Application tests**
 
-1. Open the BDD Framework test runner at `[URL]`.
-2. Select the `[feature]` and run.
-3. `[Optional: trigger via the framework's REST endpoint for CI]`.
+1. Open the test runner at [URL](https://personal-z94bm3ws.outsystemscloud.com/Museum_Visitorship/BDD_TestRunner).
+2. Click on `[Run All tests]` and run.
 
 **IaC tests**
 
