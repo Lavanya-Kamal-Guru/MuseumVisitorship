@@ -339,7 +339,7 @@ The live API call is deliberately **not** unit-tested. Tests feed canned sample 
 **Application tests**
 
 1. Open the test runner at [URL](https://personal-z94bm3ws.outsystemscloud.com/Museum_Visitorship/BDD_TestRunner).
-2. Click on `[Run All tests]` and run.
+2. Click on `Run All tests` and run.
 
 **IaC tests**
 
@@ -353,7 +353,7 @@ checkov -d .
 
 ### 10.5 Results
 
-`[Add a screenshot or summary of the latest run. Only include results you have actually produced.]`
+![Test Resul](docs/testrun.png)
 
 ---
 
@@ -409,6 +409,3 @@ checkov -d .
 
 - Automated UI tests for the filters and charts.
 - Alerting when a sync fails.
-- Forecasting or seasonality views.
-- Caching of heavy aggregations.
-- `[your own ideas]`
