@@ -46,11 +46,11 @@ An OutSystems application that retrieves museum visitorship data from [data.gov.
 
 | Item | Value |
 |---|---|
-| Environment URL | `[https://personal-z94bm3ws.outsystemscloud.com/]` |
-| Application URL | `[https://...]` |
-| Reviewer account | `[username]` (password shared separately) |
-| Role | `[role granted]` |
-| Service Studio / ODC Studio access | `[Yes / No]` |
+| Environment URL | `https://personal-z94bm3ws.outsystemscloud.com/` |
+| Application URL | [Museum_Visitorship](https://personal-z94bm3ws.outsystemscloud.com/Museum_Visitorship/) |
+| Reviewer account | `sampleuser@gmail.com` (123456) |
+| Role | `Admin` |
+| Service Studio / ODC Studio access | `Yes` |
 
 **Steps**
 
@@ -67,11 +67,11 @@ An OutSystems application that retrieves museum visitorship data from [data.gov.
 | Item | Detail |
 |---|---|
 | Source | data.gov.sg |
-| Dataset | `[dataset name]` |
-| Dataset ID / API endpoint | `[id / URL]` |
+| Dataset | `Visitorship to National Museums and Heritage Institutions`[URL](https://data.gov.sg/datasets?query=visitorship&resultId=d_618a1224b896b436ce650be1f77c804e) |
+| Dataset ID / API endpoint | [URL](https://data.gov.sg/datasets?query=visitorship&resultId=d_618a1224b896b436ce650be1f77c804e) |
 | Granularity | `[e.g. visitors per museum per month]` |
 | Time range | `[from – to]` |
-| Licence | Singapore Open Data Licence (`[confirm on the dataset page]`) |
+| Licence | Singapore Open Data Licence  |
 
 **Why this dataset:** it has a clear time dimension and a natural category (museum), which supports trends, comparison and drill-down without needing any extra data.
 
@@ -91,7 +91,7 @@ An overview with interactive filters.
 - **Recent records:** the latest visitorship records.
 - Everything below the filters refreshes when a filter changes.
 
-![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](https://personal-z94bm3ws.outsystemscloud.com/Museum_Visitorship/Dashboard)
 
 ### 4.2 Museums
 
