@@ -98,7 +98,7 @@ An overview with interactive filters.
 - A list of all museums with the years covered and total visitors.
 - **Museum detail:** a chart of visitorship by year for the selected museum.
 
-![Museums](docs/screenshots/museums.png)
+![Museums](docs/Museums.png)
 
 ### 4.3 Visitorship
 
