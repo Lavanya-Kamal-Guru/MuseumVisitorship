@@ -209,21 +209,23 @@ Notes
 
 Approach: data is pulled from data.gov.sg and stored in the application's own database. The screens read from this local copy rather than calling the API on each request.
 Sync schedule
-Trigger	Detail
-Automatic	A timer runs `SyncAll` daily at 12:00 am (`[timezone]`), so the data is refreshed every day without any user action
-Manual	A user can start a sync on demand from `[screen / button]` (`[role required]`). The button is disabled and shows a progress indicator while the sync runs, and the last sync time is shown afterwards
+| Trigger |	Detail |
+|---|---|
+|Automatic|	A timer runs `SyncAll` daily at 12:00 am (`[timezone]`), so the data is refreshed every day without any user action|
+|Manual| A user can start a sync on demand from `[screen / button]` (`[role required]`). The button is disabled and shows a progress indicator while the sync runs, and the last sync time is shown afterwards| | |
+
 Both triggers call the same `SyncAll` action, so they behave identically. `[If a sync is already running, a second one is skipped or queued: describe your rule.]`
-Flow
-`SyncAll` is triggered either by the daily timer at 12:00 am (`[timezone]`) or by a manual sync started by a user (`[screen / button where it lives]`).
-`FetchVisitorship` calls the API (with pagination if the dataset requires it). `[Describe how MuseumURL is used here.]`
-`MapToEntities` converts raw records into museums and visitorship rows, and validates them.
-`UpsertMuseums` and `UpsertVisitorship` write the data. The sync is idempotent, so running it twice creates no duplicates.
-`LastSynced` (Museum) and `LastSyncedOn` (Visitorship) are stamped on every row processed, and the outcome is logged (`[Service Center log / extended log]`).
-Data quality rules
-Case	Handling
-Non-numeric or empty visitor count (e.g. `na`)	`[skipped / set to 0]` and logged
-Duplicate record	Updated in place
-API failure	Error is logged, existing data is left untouched and `LastSynced` is not updated
+### Flow
+1. `DailySyncVisitorship` is triggered either by the daily timer at 12:00 am (`[server timezone]`) or by a manual sync started by a user (`[Visitorship / Sync Visitorship]`).\
+2. `GetVisitorshipRecords` calls the API (with pagination if the dataset requires it). `[Describe how MuseumURL is used here.]`.\
+3. `Sync Museums` and `Sync Visitorship` write the data. The sync is idempotent, so running it twice creates no duplicates.\
+4. `LastSynced` (Museum) and `LastSyncedOn` (Visitorship) are stamped on every row processed, and the outcome is logged (`[Service Center log / extended log]`).
+### Data quality rules
+|Case | Handling|
+|---|---|
+|Non-numeric or empty visitor count (e.g. `na`)|`[skipped / set to 0]` and logged|
+|Duplicate record|Updated in place|
+|API failure|Error is logged, existing data is left untouched and `LastSynced` is not updated| | |
 
 
 ## 8. Design Decisions and Trade-offs
@@ -233,9 +235,7 @@ API failure	Error is logged, existing data is left untouched and `LastSynced` is
 | Sync into local entities instead of live API calls | Fast screens, resilient to API downtime, no rate-limit exposure, allows indexing and aggregation | Data can be stale until the next sync |
 | Layered modules (IS / CS / CW / app) | Clear separation of concerns, testable logic, reusable components | More modules to maintain for a small app |
 | Idempotent upsert on a natural key | Safe re-runs and easy recovery | Needs a unique index and a clear key definition |
-| Aggregation in server actions or aggregates | Less data sent to the client, better performance | Logic must be kept consistent with the UI filters |
-| Raw API call separated from mapping logic | Mapping can be tested without network access | Slightly more actions to write |
-| `[add your own]` | | |
+| Aggregation in server actions or aggregates | Less data sent to the client, better performance | Logic must be kept consistent with the UI filters | | |
 
 **Security and robustness**
 
