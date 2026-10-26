@@ -111,7 +111,7 @@ An overview with interactive filters.
 
 - Compares three museums side by side on one chart.
 
-![Compare](docs/screenshots/Compare.png)
+![Compare](docs/Compare.png)
 
 ### 4.5 UX notes
 
@@ -119,7 +119,22 @@ An overview with interactive filters.
 - `[Responsive behaviour]`
 - `[Accessibility: contrast, labels, keyboard navigation, if done]`
 
----
+
+```mermaid
+flowchart TD
+    APP["Museum_Visitorship<br/>Four screens and navigation"]
+    CW["MuseumVisitorship_CW<br/>Charts and filters"]
+    CS["MuseumVisitorship_CS<br/>Aggregation, upsert, entities"]
+    IS["MuseumVisitorship_IS<br/>API call, mapping, validation"]
+    DB[("Database<br/>Museum, Visitorship, SyncLog")]
+    API["data.gov.sg API"]
+
+    APP --> CW
+    APP --> CS
+    CS --> IS
+    CS --> DB
+    IS --> API
+```
 
 ## 5. Architecture
 
@@ -145,11 +160,10 @@ The application is split into layers so that data access, business logic and UI 
 
 | Module | Responsibility |
 |---|---|
-| `[Museum_IS]` | Calls the data.gov.sg API, maps and validates records |
-| `[Museum_CS]` | Upserts data, exposes server actions for aggregation and filtering |
-| `[Museum_CW]` | Reusable UI components (charts, filters) |
-| `[Museum_App]` | The four screens and navigation |
-| `[Museum_Tests]` | BDD test suite, kept out of production |
+| `[MuseumVisitorship_IS]` | Calls the data.gov.sg API, maps and validates records |
+| `[MuseumVisitorship_CS]` | Upserts data, exposes server actions for aggregation and filtering |
+| `[MuseumVisitorship_CW]` | Reusable UI components (charts, filters) |
+| `[Museum_Visitorship]` | The four screens and navigation |
 
 Add a diagram image in `docs/architecture.md` if you want something more detailed than the one above.
 
