@@ -171,16 +171,39 @@ Add a diagram image in `docs/architecture.md` if you want something more detaile
 
 ## 6. Data Model
 
-| Entity | Key attributes |
-|---|---|
-| `Museum` | `Id`, `Name` |
-| `Visitorship` | `Id`, `MuseumId`, `Year`, `Month` (if available), `Visitors` |
-| `SyncLog` | `Id`, `StartedOn`, `FinishedOn`, `Status`, `RecordsRead`, `RecordsWritten`, `ErrorMessage` |
-
-- `Visitorship` has a unique index on (`MuseumId`, `Year`, `Month`) so the sync can safely upsert.
-- Index `[list indexes you added]` to support the dashboard filters.
-
----
+```mermaid
+erDiagram
+    MUSEUM ||--o{ VISITORSHIP : "has yearly records"
+    MUSEUM {
+        long Id PK
+        text Name
+        boolean IsActive
+        datetime LastSynced
+    }
+    VISITORSHIP {
+        long Id PK
+        text VistorId
+        integer Year
+        long MuseumId FK
+        integer Visitorship
+        boolean IsActive
+        datetime LastSyncedOn
+    }
+    MUSEUMURL {
+        long Id PK
+        text Name
+        text URL
+    }
+```
+Entity	Purpose	Key attributes
+- `Museum`	One row per museum	`Id`, `Name`, `IsActive`, `LastSynced`
+- `Visitorship`	Visitors for one museum in one year	`Id`, `VistorId`, `Year`, `MuseumId` (FK to `Museum`), `Visitorship` (visitor count), `IsActive`, `LastSyncedOn`
+- `MuseumURL`	`[Purpose, e.g. the data.gov.sg source URL for each museum, read by the sync]`	`Id`, `Name`, `URL`
+Notes
+- Visitorship is stored at yearly granularity.
+- `IsActive` is a soft-delete flag: `[describe the rule, e.g. records no longer returned by the API are set to inactive instead of being deleted]`. Screens only show active rows.
+- `LastSynced` and `LastSyncedOn` record when each row was last refreshed by the sync. The last sync time shown in the app is `[the latest value of these]`.
+- `Visitorship` has a unique index on (`MuseumId`, `Year`) so the sync can safely upsert. `[Confirm this index exists.]`
 
 ## 7. Data Synchronisation
 
