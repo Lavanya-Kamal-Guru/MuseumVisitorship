@@ -1,0 +1,4 @@
+# copy the four images into docs/screenshots/, then:
+git add docs/screenshots
+git commit -m "docs: add application screenshots"
+git push
