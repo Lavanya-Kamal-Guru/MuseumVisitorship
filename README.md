@@ -105,7 +105,7 @@ An overview with interactive filters.
 - A table of all visitorship records.
 - **Download:** exports the records as `[CSV / Excel]`.
 
-![Visitorship](docs/screenshots/visitorship.png)
+![Visitorship](docs/Visitorship.png)
 
 ### 4.4 Compare Museums
 
