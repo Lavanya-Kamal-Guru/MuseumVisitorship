@@ -46,7 +46,7 @@ An OutSystems application that retrieves museum visitorship data from [data.gov.
 
 | Item | Value |
 |---|---|
-| Environment URL | `[https://...]` |
+| Environment URL | `(https://personal-z94bm3ws.outsystemscloud.com/)` |
 | Application URL | `[https://...]` |
 | Reviewer account | `[username]` (password shared separately) |
 | Role | `[role granted]` |
