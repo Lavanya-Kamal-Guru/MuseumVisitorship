@@ -2,7 +2,7 @@
 
 An OutSystems application that retrieves museum visitorship data from [data.gov.sg](https://data.gov.sg), stores it locally, and lets users explore, compare and export it. The repository also contains the Infrastructure as Code (IaC) for the AWS environment and the automated tests.
 
-> Fill in every `[bracketed]` item before submitting.
+
 
 ---
 
