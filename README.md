@@ -91,7 +91,7 @@ An overview with interactive filters.
 - **Recent records:** the latest visitorship records.
 - Everything below the filters refreshes when a filter changes.
 
-![Dashboard](https://personal-z94bm3ws.outsystemscloud.com/Museum_Visitorship/Dashboard)
+![Dashboard](docs/dashboard.png)
 
 ### 4.2 Museums
 
